@@ -1,0 +1,98 @@
+#+title: Django REST For Recipe App
+#+author: Shafiqur Rahman
+#+options: h:1 num:nil toc:nil
+
+* App Design
+** 19 API Endpoints
+   - Schema
+     - GET ~/api/schema/~
+   - Health Check
+     - GET ~/api/health-check/~
+   - Managing recipes
+     - GET    ~/api/recipe/recipes/~
+     - POST   ~/api/recipe/recipes/~
+     - GET    ~/api/recipe/recipes/{id}/~
+     - PUT    ~/api/recipe/recipes/{id}/~
+     - PATCH  ~/api/recipe/recipes/{id}/~
+     - DELETE ~/api/recipe/recipes/{id}/~
+     - POST   ~/api/recipe/recipes/{id}/upload-image/~
+   - Managing users
+     - POST ~/api/user/register/~
+     - POST ~/api/user/login/~
+   - Managing tags
+     - GET    ~/api/recipe/tags/~
+     - PUT    ~/api/recipe/tags/{id}/~
+     - PATCH  ~/api/recipe/tags/{id}/~
+     - DELETE ~/api/recipe/tags/{id}/~
+   - Managing Ingredients
+     - GET    ~/api/recipe/ingredients/~
+     - PUT    ~/api/recipe/ingredients/{id}/~
+     - PATCH  ~/api/recipe/ingredients/{id}/~
+     - DELETE ~/api/recipe/ingredients/{id}/~
+** Project Structure 
+   - ~app/~        : Django Main Project
+   - ~app/core/~   : Code Shared Between Multiple Apps (Database
+     Related Codes)
+   - ~app/user/~   : User Related Codes
+   - ~app/recipe/~ : Recipe Related Codes-
+   - Swagger       : Browse ~APIs~
+
+* Intro to TDD (Unit Test)
+  - Code which tests code
+  - Sets up conditions/input
+  - Runs a piece of code
+  - Checks output with "assertions"
+* System Setup
+  - Docker, Docker compose
+  - Git
+* Project Setup 
+** Docker
+   - Define ~Dockerfile~
+   - Create Docker Compose configuration
+   - Run all commands via Docker Compose
+** Docker Hub introduce rate limit 
+   - 100 pulls / 6hr for unauthenticated users 
+   - 200 pulls / 6hr for authenticated users
+** GitHub Actions is a shared service
+   - 100 pulls / 6hr applied for all users 
+** Authenticate with Docker Hub
+   - Create account
+   - Setup credentials
+   - Login before running job
+   - Get 200 pulls / 6hr for free. 
+** Configure Docker
+   - Choose Python as base image
+   - Install Dependencies
+   - Setup Users
+** Configure Docker Compose
+   - Define services
+   - Name (example:app)
+   - Port mapping
+   - Volume mapping
+   - Command Example
+     #+BEGIN_SRC bash
+       docker-compose run --rm app sh -c "python manage.py collectstatic"
+     #+END_SRC
+     - ~docker-compose~ runs a Docker Compose command
+     - ~run~ will start a specific container defined in configuration
+     - ~--rm~ remove the container
+     - ~app~ is the name of the service
+     - ~sh -c~ passes in a shell command
+     - ~"python manage.py collectstatic"~ command to run inside container 
+** Linting 
+   - Install flake8 package
+   - Run it through Docker Compose
+     #+BEGIN_SRC bash
+       docker-compose run --rm app sh -c "flake8"
+     #+END_SRC
+** Testing 
+   - Django test suite
+   - Setup test per Django app
+   - Run tests through Docker Compose
+     #+BEGIN_SRC bash
+       docker-compose run --rm app sh -c "python manage.py test"
+     #+END_SRC
+** Starting Django Project
+   #+BEGIN_SRC bash
+     docker-compose run --rm app sh -c "django-admin startproject app ."
+   #+END_SRC
