@@ -246,11 +246,11 @@
 ** Problem with Docker compose
    - Using ~depends_on~ ensure service start, doesn't ensure
      application is running
-   - Make Django "wait for db"
+   - Make Django Management Command "wait for db"
      - Check for database availability
      - Continue when database ready
    - Create custom Django management command
-   - Create new app for db
+   - Create new app ~core~ for db
      #+BEGIN_SRC bash
        docker-compose run --rm app sh -c "python manage.py startapp core"
      #+END_SRC
