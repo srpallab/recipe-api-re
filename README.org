@@ -96,3 +96,161 @@
    #+BEGIN_SRC bash
      docker-compose run --rm app sh -c "django-admin startproject app ."
    #+END_SRC
+* Configure GitHub Actions
+  - Automation tools
+  - Similar to Travis-CI, GitLab, CI/CD, Jenkins
+  - Run jobs when code changes
+  - Automate tasks
+** Common uses
+   - Deployment
+   - Code linting
+   - Unit tests
+** How it works
+   - Trigger: Push to GitHub
+   - Job: Run unit test
+   - Result: Success or fail
+** Pricing
+   - Charged per minutes
+   - 2,000 free minutes 
+** Configure
+   - Create a configuration file at ~.github/workflow/checks.yml~
+   - Set trigger
+   - Add steps for running and linting
+   - Configure Docker Hub authenticate
+** Authenticate Docker Hub
+   - Use docker login
+   - Add secrets to GitHub project Actions Menu
+     - ~DOCKERHUB_TOKEN~
+     - ~DOCKERHUB_USER~
+* TDD with Django
+** Django test framework
+   - Based on the ~unittest~ library
+   - Django adds features
+     - Test client - dummy web browser
+     - Simulation authentication
+     - Temporary database
+   - Django REST Framework adds features
+     - API test client 
+** Where do you put tests
+   - Placeholder ~tests.py~ added to each app
+   - Or, create ~tests/~ sub-directory to split tests up
+   - keep in mind
+     - Only use ~test.py~ or ~tests/~ directory (not both)
+     - Test modules must start with ~test_~
+     - Test directories must contain ~__init__.py~
+** Test Database
+   - Test code that uses the DB
+   - Specific database for tests
+   - Happens for every test
+** Test Class
+   - ~SimpleTestCase~
+     - No database integration
+     - Useful if no database is required for test
+     - Save time executing tests
+   - ~TestCase~
+     - Database integration
+     - Useful for testing code that uses the database 
+** Writing tests
+   - Import test Class
+   - Import objects to test
+   - Define test class
+   - Add test method
+   - Setup inputs
+   - Execute code to be tested
+   - Check output
+** Mocking 
+   - Override or change behave of dependencies
+   - Avoid unintended side effects
+   - Isolate code being tested
+   - Example:
+     #+begin_example
+       register_user() ---> create_in_db() ---> send_welcome_email()
+     #+end_example
+   - use ~unittest.mock~
+     - ~MagicMock/Mock~ replace real objects
+     - ~patch~ override code for tests
+** Testing API
+   - Make actual requests
+   - Check results
+   - Django REST framework API Client
+     - Based on Django Test Client
+     - Make requests
+     - Check results
+     - Override any authentication
+   - Using the API Client
+     - Import ~APIClient~
+     - Create client
+     - Make request
+     - Check result
+* Setup and Configure Database
+** PostgreSQL
+   - Integrate well with Django
+** Docker Compose
+   - Define with project (re-usable)
+   - Persistent data using volume
+   - Handles network configuration
+   - Environment variable configuration
+** Network connectivity
+   - Set ~depends_on~ on ~app~ service to start ~db~ first
+   - Docker Compose creates a network
+   - The ~app~ service can use ~db~ host name
+** Volumes
+   - Persistent data
+   - Maps directory in container to local machine.
+** Initial Database Configurations for new DB service
+   #+begin_src yaml
+     environment:
+       - POSTGRES_DB=devdb
+       - POSTGRES_USER=devuser
+       - POSTGRES_PASSWORD=password
+   #+end_src
+   - Creates a DB named ~devdb~
+   - Creates a user named ~devuser~
+   - Creates a password for ~devuser~ with ~password~
+** Steps for configuring database
+   - Tell Django how to connect
+   - Install the tool Django uses to connect
+   - Update requirements to install PostgreSQL adapter
+   - Django settings 
+     - Engine (type of Database)
+     - ~Hostname~ (IP or domain name for database)
+     - Port (5432)
+     - Database Name
+     - Username
+     - Password
+   - Pull configuration values from environment variable
+   - Easily passed to Docker
+   - Used in local development or production
+   - Single place to configure project
+   - Easy to do with Python
+** ~psycopg2~
+   - The package that you need in order for Django to connect to our Database
+   - Most popular PostgreSQL adapter for Python
+   - ~psycopg2-binary~
+     - Okay for development
+     - Not good for production
+   - ~psycopg2~
+     - Compiles form source
+     - Required additional dependencies
+     - Easy to install with Docker
+** Installing ~Psycopg2~
+   - List of package dependencies in docs
+     - C compiler
+     - ~python3-dev~
+     - ~libpq-dev~
+   - Equivalent packages for Alpine
+     - ~postgresql-client~
+     - ~build-base~ (can be cleaned)
+     - ~postgresql-dev~ (can be cleaned)
+     - ~musl-dev~ (can be cleaned)
+** Problem with Docker compose
+   - Using ~depends_on~ ensure service start, doesn't ensure
+     application is running
+   - Make Django "wait for db"
+     - Check for database availability
+     - Continue when database ready
+   - Create custom Django management command
+   - Create new app for db
+     #+BEGIN_SRC bash
+       docker-compose run --rm app sh -c "python manage.py startapp core"
+     #+END_SRC
