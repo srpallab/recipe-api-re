@@ -254,3 +254,52 @@
      #+BEGIN_SRC bash
        docker-compose run --rm app sh -c "python manage.py startapp core"
      #+END_SRC
+* Create User Model
+** Django Authentication
+   - Build in Authentication system
+   - Framework for basic features
+     - Registration
+     - Login
+     - Authentication
+   - Integrates with Django Admin
+** Django user model
+   - Foundation of the Django Authentication system
+   - Default user model use username instead of email
+   - Not easy to customize
+   - Create a custom model for new projects
+** Customize user Model
+   - Base from ~AbstractBaseUser~ and ~PermissionsMixin~
+   - Create custom manager
+   - Used for ~CLI~ integration
+   - Set ~AUTH_USER_MODEL~ in settings.py
+   - Create and run migrations 
+** ~AbstractBaseUser~
+   - Provide features for authentication
+   - Doesn't include field
+** ~PermissionsMixin~
+   - Support for Django permission system
+   - Include fields and methods for authentication system
+** Custom issues 
+   - Running migrations before setting custom model.
+     - Set custom model first
+   - Typos in configuration
+   - Indentation in manager or model
+** Design custom user model
+   - User fields
+     - email (~EmailField~)
+     - name (~CharField~)
+     - is_active (~BooleanField~)
+     - is_staff (~Booleanfield~)
+   - User model manager
+   - Used to manage objects
+   - Custom logic for creating objects
+     - Hash password
+   - Methods for Django ~CLI~
+     - Create superuser
+   - ~BaseUserManager~
+     - Base class for managing users
+     - Useful helper methods
+       - ~noramlize_email~ for storing emails consistently
+     - Custom Methods
+       - ~create_user~ called when creating user
+       - ~create_superuser~ used by the ~CLI~ to create a superuser (admin)
