@@ -303,3 +303,96 @@
      - Custom Methods
        - ~create_user~ called when creating user
        - ~create_superuser~ used by the ~CLI~ to create a superuser (admin)
+* Setup Django Admin
+** How to enable Django Admin
+   - Enable per model
+   - Inside ~admin.py~
+     - ~admin.site.register(User)~
+** Customizing 
+   - Create class based off ~ModelAdmin~ or ~UserAdmin~
+   - Override or set class variables
+     #+BEGIN_SRC python
+       from django.contrib.admin import BaseUserAdmin
+
+
+       class UserAdmin(BaseUserAdmin):
+	   """Define the adminpages for user"""
+	   ordering = ['id']
+	   list_display = ['email', 'name']
+	   fieldsets = (
+	       (
+		   None,
+		   {'fields': ('email', 'password')}
+	       )
+	   )
+	   readonly_fields = ['last_login']
+	   add_fieldssets = (
+	       (
+		   None,
+		   {
+		       'classes': ('wide',),
+		       'fields': ('email',),
+		   }
+	       )
+	   )
+     #+END_SRC
+* API Documentation
+** What to document?
+   - Everything needed to use the API
+   - Available endpoints (paths)
+     - ~/api/recipes~
+   - Supported methods
+     - GET, POST, PUT, PATCH, DELETE
+   - Format of payloads (inputs)
+     - Parameters
+     - Post ~JSON~ format
+   - Format of responses (output)
+     - Responses ~JSON~ format
+   - Authentication process
+** Docs in ~DRF~
+   - Auto generate docs (with third party library ~drf-spectacular~)
+   - Generate Schema
+   - Browse able web interface
+   - Make test requests
+   - Handle Authentication
+** How it works
+   - Generate "schema" file
+   - Parse schema into GUI
+** ~OpenAPI~ Schema
+   - Standard for describing API
+   - Popular in industry
+   - Supported by most API documentation tools
+   - Uses popular formats: ~YAML/JSON~
+** Using a Schema
+   - Download and run in local Swagger instance
+   - Serve Swagger with API
+* Build User API
+** User API
+   - User register
+   - Creating authentication token
+   - Viewing or updating profile 
+** Endpoints
+   - ~user/create/~
+     - POST - Register a new user.
+   - ~user/token/~
+     - POST - Create new token
+   - ~user/me~
+     - PUT/PATCH - Update profile
+     - GET - View profile
+** Authentication
+   - Basic : Send username and password with each request
+   - Token : Use a token in the HTTP header
+   - JSON Web Token (~JWT~) : Use an access and refresh token
+   - Session : Use cookies.
+** Create App in Docker
+   #+BEGIN_SRC bash
+     docker-compose run --rm app sh -c "python manage.py startapp user"
+   #+END_SRC
+* Build Ingredients API
+* Build Tags API
+* Build Recipe API
+* Recipe Image API
+* Implementing Filtering
+* Deploy on AWS
+* Course Summary
+* Upgrades
