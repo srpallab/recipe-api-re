@@ -367,6 +367,10 @@
    - Download and run in local Swagger instance
    - Serve Swagger with API
 * Build User API
+** Create App in Docker
+   #+BEGIN_SRC bash
+     docker-compose run --rm app sh -c "python manage.py startapp user"
+   #+END_SRC
 ** User API
    - User register
    - Creating authentication token
@@ -384,10 +388,6 @@
    - Token : Use a token in the HTTP header
    - JSON Web Token (~JWT~) : Use an access and refresh token
    - Session : Use cookies.
-** Create App in Docker
-   #+BEGIN_SRC bash
-     docker-compose run --rm app sh -c "python manage.py startapp user"
-   #+END_SRC
 * Build Ingredients API
 * Build Tags API
 * Build Recipe API
