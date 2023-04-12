@@ -366,6 +366,27 @@
 ** Using a Schema
    - Download and run in local Swagger instance
    - Serve Swagger with API
+* View
+  - Handles a request made to a URL
+  - Django uses functions
+  - ~DRF~ uses classes
+    - Reusable logic
+    - Override behavior
+  - ~DRF~ also support decorators
+  - ~APIView~ and ~Viewsets~ = ~DRF~ base classes
+  - API View
+    - Focused around HTTP methods
+    - Class methods for HTTP methods
+    - Provide flexibility over URLs and logic
+    - Useful for non CRUD API
+      - Avoid for simple Create, Read, Update, Delete API
+      - Bespoke logic (example: authentication, jobs, external API)
+  - ~Viewsets~
+    - Focused around actions
+      - Retrieve, list, update, partial update, destroy
+    - Map to Django Models
+    - Use Routes to generate URLs
+    - Great for CURD operations
 * Build User API
 ** Create App in Docker
    #+BEGIN_SRC bash
@@ -388,9 +409,23 @@
    - Token : Use a token in the HTTP header
    - JSON Web Token (~JWT~) : Use an access and refresh token
    - Session : Use cookies.
+* Build Recipe API
+** Features
+   - Create
+   - List
+   - View Detail
+   - Update
+   - Delete
+** End Points
+   - ~/recipes/~
+     - GET - List all recipes
+     - POST - Create recipes
+   - ~/recipes/<recipe_id>/~
+     - GET - View details of recipe
+     - PUT/PATCH - Update recipe
+     - DELETE - Delete recipe
 * Build Ingredients API
 * Build Tags API
-* Build Recipe API
 * Recipe Image API
 * Implementing Filtering
 * Deploy on AWS
