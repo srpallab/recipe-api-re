@@ -387,6 +387,34 @@
     - Map to Django Models
     - Use Routes to generate URLs
     - Great for CURD operations
+* Nested ~Serializers~
+  - ~Serializer~ within a ~serializer~
+  - Used for fields which are object
+  - ~JSON~ Example:
+    #+begin_src json
+      {
+	  "title": "Some Title",
+	  "user": "Jeff",
+	  "tags": [
+	      {"name": "Tag 1"},
+	      {"name": "Tag 2"}
+	  ]
+      }
+    #+end_src
+  - Python Example:
+    #+begin_src python
+      class TagSerializer(serializers.Serializer):
+	  name = serializers.CharField(max_length=100)
+
+
+      class RecipeSerializer(serializers.Serializer):
+	  title = serializers.CharField(max_length=100)
+	  user = serializers.CharField(max_length=100)
+	  tags  = TagSerializer(many=True)
+    #+end_src
+  - Limitation
+    - Read only by default
+    - Custom logic to make write able or edit able
 * Build User API
 ** Create App in Docker
    #+BEGIN_SRC bash
@@ -424,8 +452,23 @@
      - GET - View details of recipe
      - PUT/PATCH - Update recipe
      - DELETE - Delete recipe
-* Build Ingredients API
 * Build Tags API
+** Tasks 
+   - Add ability to add recipe tags
+   - Create model for tags
+   - Add tag API endpoints
+   - Update Recipe endpoint
+     - Adding and Listing tags
+** Model
+   - name : Name of tag to create
+   - user : User who created/owns tag
+** Tag Endpoint
+   - ~/api/recipe/tags~
+     - GET       : List available tags
+     - POST      : Create tag
+     - PUT/PATCH : Update tags
+     - DELETE    : Remove tag
+* Build Ingredients API
 * Recipe Image API
 * Implementing Filtering
 * Deploy on AWS
