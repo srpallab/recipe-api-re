@@ -469,6 +469,20 @@
      - PUT/PATCH : Update tags
      - DELETE    : Remove tag
 * Build Ingredients API
+** Ingredient Model
+   - name: Name of ingredient to create
+   - user: User who owns ingredient
+** Ingredient Endpoint
+   - ~/api/recipe/ingredients/~
+     - GET : List Ingredients
+   - ~/api/recipe/ingredients/<id>~
+   - GET       : Get Ingredient
+   - PUT/PATCH : Update Ingredient
+   - DELETE    : Remove Ingredient
+   - ~/api/recipe/~
+     - POST : Create ingredient (as part of recipe)
+   - ~/api/recipe/<id>~
+     - PUT/PATCH  : Create or modify ingredient
 * Recipe Image API
 * Implementing Filtering
 * Deploy on AWS
